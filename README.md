@@ -1,8 +1,8 @@
 # Overview
-This document shows step by step how to setup an TrueChain. 
-TrueChain is a Layer-1 network that is an Ethereum Private Network using the Proof of Authority concensus engine.
-Geth is the Golang implementation of an EVM node. This will be what we use.
+TrueChain is a private Ethereum Network ran using the Proof of Authority consensus engine. It allows subject matter experts the ability to notarize their predictions about the future publicly using various smart contracts. This serves the purpose of publicly establishing their credibility.
 
+This document shows step by step how to setup. 
+Geth is the Golang implementation of an EVM node which TrueChain relies on.
 
 ## Installing a Geth Node
 https://www.quicknode.com/guides/infrastructure/how-to-install-and-run-a-geth-node
