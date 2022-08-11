@@ -192,6 +192,13 @@ Extracting private key from JSON file
  web3 account extract --keyfile "/Users/garyjob/Applications/truechain/node1/keystore/UTC--2022-07-24T22-14-45.104291000Z--9f8312a6579d2dd2984663426df3b12e2fd5d480"  --password "12345678"
 ```
 
+Network information
+- Network Name: TrueChain - Local
+- New RPC URL: http://127.0.0.1:8545
+- Chain ID as described in genesis file: 98794616
+- Currency Symbol: TRUE
+
+
 ### Connecting to the private Network - Geth console
 Connect client to the network
 ```
