@@ -1,8 +1,44 @@
-# Overview
-TrueChain is a private Ethereum Network ran using the Proof of Authority consensus engine. It allows subject matter experts the ability to notarize their predictions about the future publicly using various smart contracts. This serves the purpose of publicly establishing their credibility.
+# TrueChain
 
-This document shows step by step how to setup. 
-Geth is the Golang implementation of an EVM node which TrueChain relies on.
+TrueChain is a **private Ethereum network** run by [TrueSight DAO](https://truesight.me) using the Proof of Authority (Clique) consensus engine. It provides an **immutable audit trail** for DAO and Agroverse data.
+
+## Purpose
+
+TrueChain serves as a permanent, verifiable record for:
+
+- **Contributions** (for voting rights)
+- **Offchain transactions**
+- **Managed ledger transactions** (AGL ledgers)
+- **Invoices** (farmers, freighters, lab reports, shipping)
+- **QR codes / bags** (registration, transfers, sales)
+- **Tree plantings** (SunMint pledges and fulfillments)
+- **Sales receipts** (Venmo, PIX, Stripe)
+- **Products, shipments, farms** (Agroverse provenance)
+
+### How It Works
+
+- **Google Sheets** remain the source of truth. Data is written to Sheets first.
+- A **Mirror Service** copies new rows to TrueChain via smart contracts.
+- Each mirrored row gets a **transaction hash** written back to a `TrueChain Tx` column.
+- Members view records via the **DApp** ("View on TrueChain") — no wallet required. The DApp fetches transaction data from a **Google Apps Script** API that reads from TrueChain.
+
+### Key Facts
+
+- **Chain ID:** 98794616
+- **Consensus:** Clique (Proof of Authority)
+- **Gas price:** 0 (no per-transaction fees)
+- **Members** do not interact with the chain directly; they use the DApp, Telegram, and Edgar as today.
+
+### Full Documentation
+
+For setup, integration architecture, smart contracts, and implementation phases, see the [agentic_ai_context TRUECHAIN.md](https://github.com/TrueSightDAO/agentic_ai_context/blob/main/TRUECHAIN.md) in the TrueSight DAO workspace context repository.
+
+---
+
+## Setup
+
+This document shows step by step how to set up TrueChain locally.  
+**Geth** is the Golang implementation of an EVM node which TrueChain relies on.
 
 ## Installing a Geth Node
 https://www.quicknode.com/guides/infrastructure/how-to-install-and-run-a-geth-node
@@ -13,7 +49,55 @@ MacOS
  brew install ethereum
 ```
 
-## Setting up a Private POA Ethereum Network
+## Using setup-node.sh (Recommended)
+
+The `setup-node.sh` script automates node creation, account setup, genesis init, and static-nodes configuration.
+
+### Usage
+
+```bash
+# First node (or add to local cluster)
+./setup-node.sh
+
+# Add node that connects to an existing cluster (local or EC2)
+./setup-node.sh --connect-to http://10.0.1.50:8545
+./setup-node.sh --connect-to http://localhost:8545
+```
+
+### Behavior
+
+- **First node:** Creates `node1/`, new account, empty `static-nodes.json`
+- **Local add:** Creates `node2/`, `node3/`, etc.; uses enodes from repo `static-nodes.json` for existing nodes
+- **With `--connect-to`:** Fetches enodes via RPC from the target node (and its peers), writes them to the new node’s `static-nodes.json`
+
+### Examples
+
+| Scenario | Command |
+|----------|---------|
+| Create node1 on this machine | `./setup-node.sh` |
+| Add node2, connect to local node1 | `./setup-node.sh` (with node1 present) |
+| Add node, connect to EC2 node | `./setup-node.sh --connect-to http://ec2-ip:8545` |
+
+### After setup
+
+The script prints a `geth` start command. Run it from the node directory:
+
+```bash
+cd node1
+geth --nodiscover --nousb --datadir . --syncmode full \
+  --port 30310 \
+  --http --http.addr localhost --http.port 8545 \
+  --http.api admin,eth,miner,net,txpool,personal,web3 \
+  --miner.gasprice 0 --miner.gastarget 470000000000 \
+  --allow-insecure-unlock \
+  --mine --unlock <ADDRESS> --password password.txt
+```
+
+Nodes 1–3 are signers (unlock + mine); node 4+ run in client mode (mine only). Use `admin.nodeInfo` in the geth console to get this node’s enode for other nodes.
+
+---
+
+## Setting up a Private POA Ethereum Network (Manual)
 
 https://www.c-sharpcorner.com/article/setup-your-private-ethereum-network-with-geth2/
 
