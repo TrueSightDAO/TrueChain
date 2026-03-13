@@ -29,6 +29,10 @@ TrueChain serves as a permanent, verifiable record for:
 - **Gas price:** 0 (no per-transaction fees)
 - **Members** do not interact with the chain directly; they use the DApp, Telegram, and Edgar as today.
 
+### Write Security
+
+Only authorized private keys can write to TrueChain. No IP restriction; write authorization is enforced by the key and contract access control (allowlist with `addWriter` / `removeWriter` for revocation). See [TRUECHAIN.md §8 Write Security Protocol](https://github.com/TrueSightDAO/agentic_ai_context/blob/main/TRUECHAIN.md#8-write-security-protocol).
+
 ### Full Documentation
 
 For setup, integration architecture, smart contracts, and implementation phases, see the [agentic_ai_context TRUECHAIN.md](https://github.com/TrueSightDAO/agentic_ai_context/blob/main/TRUECHAIN.md) in the TrueSight DAO workspace context repository.
